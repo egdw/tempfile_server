@@ -1,0 +1,25 @@
+services:
+  tempfile:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      LISTEN_ADDR: ":8080"
+      DATA_DIR: "/data"
+      REQUIRE_DELETE_TOKEN: "true"
+      TRUST_PROXY: "false"
+    volumes:
+      - tempfile_data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 512m
+
+volumes:
+  tempfile_data:
